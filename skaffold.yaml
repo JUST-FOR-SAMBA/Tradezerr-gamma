@@ -1,0 +1,18 @@
+apiVersion: skaffold/v2alpha4
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: 2021199724/user-service
+      context: user_service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest : .
