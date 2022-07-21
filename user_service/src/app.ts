@@ -34,7 +34,7 @@ app.use(json());
 // });
 
 app.get("/api/users", (req: Request, res: Response) => {
-    res.status(200).send({"message": "Hello Da Jeanne"})
+    res.status(200).send({"message": "Hello Kaka Derick"})
 })
 app.use((_, res) => {
     const error = new Error('Not found');
