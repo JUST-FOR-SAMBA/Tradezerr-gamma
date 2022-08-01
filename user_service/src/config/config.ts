@@ -1,4 +1,4 @@
-const config = {
+export const config = {
     mongo: {
         options: {
             useUnifiedTopology: true,
@@ -12,8 +12,6 @@ const config = {
     },
     server: {
         host: 'localhost',
-        port: 8080
+        port: 1337
     }
 };
-
-export {config}

@@ -30,4 +30,4 @@ const getDate = () => {
 
 const logging = { info, warn, error };
 
-export {logging} ;
+export default logging;

@@ -8,7 +8,7 @@ build:
   local:
     push: false
   artifacts:
-    - image: 2021199724/user-service
+    - image: derickzr/user-service
       context: user_service
       docker:
         dockerfile: Dockerfile
