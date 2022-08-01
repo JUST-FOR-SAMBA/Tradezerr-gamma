@@ -1,0 +1,37 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  labels:
+    app: rabbitmq
+  name: rabbitmq-broker
+spec:
+  image: rabbitmq:3.10.2-management
+  persistence:
+    storageClassName: hostpath
+    storage: 5
+  replicas: 1
+  resources:
+    limits:
+      cpu: 256m
+      memory: 1Gi
+    requests:
+      cpu: 256m
+      memory: 1Gi
+  service:
+    type: ClusterIP
+  rabbitmq:
+    additionalPlugins:
+      - rabbitmq_management
+      - rabbitmq_peer_discovery_k8s
+    additionalConfig: |
+      cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s
+      cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+      cluster_formation.k8s.address_type = hostname
+      vm_memory_high_watermark_paging_ratio = 0.85
+      cluster_formation.node_cleanup.interval = 10
+      cluster_partition_handling = autoheal
+      queue_master_locator = min-masters
+      loopback_users.guest = false
+      default_user = guest
+      default_pass = guest
+    advancedConfig: ""  

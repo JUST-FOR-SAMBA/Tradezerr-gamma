@@ -1,2 +1,9 @@
 user_service/node_modules
+<<<<<<< HEAD
 user_service/.env
+=======
+debt_service/node_modules
+order_service/node_modules
+transaction_service/node_modules
+payment_service/node_modules
+>>>>>>> bf1fb71 (Added Transaction Debt and Orser service)
