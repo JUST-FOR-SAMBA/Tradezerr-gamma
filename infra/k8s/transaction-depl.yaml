@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction
+  template:
+    metadata:
+      labels:
+        app: transaction
+    spec:
+      containers:
+        - name: transaction
+          image: 2021199724/transaction-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-srv
+spec:
+  selector:
+    app: transaction
+  ports:
+    - name: transaction
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
