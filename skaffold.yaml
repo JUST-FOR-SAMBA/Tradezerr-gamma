@@ -3,13 +3,49 @@ kind: Config
 deploy:
   kubectl:
     manifests:
-      - ./infra/k8s/*
+      - ./infra/k8s/ingress-srv.yaml
+      - ./infra/k8s/user-depl.yaml
+      - ./infra/k8s/order-depl.yaml
+      - ./infra/k8s/debt-depl.yaml
+      - ./infra/k8s/transaction-depl.yaml
+      - ./infra/k8s/rabbitmq/*.yaml
+    flags:
+      global:
+        - --namespace=default
+      apply:
+        - --namespace=rabbit
+      delete:
+        - --namespace=rabbit    
 build:
   local:
     push: false
   artifacts:
-    - image: derickzr/user-service
+    - image: 2021199724/user-service
       context: user_service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest : .
+    - image: 2021199724/debt-service
+      context: debt_service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest : .
+    - image: 2021199724/order-service
+      context: order_service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest : .
+    - image: 2021199724/transaction-service
+      context: transaction_service
       docker:
         dockerfile: Dockerfile
       sync:

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: user
-          image: derickzr/user-service
+          image: 2021199724/user-service
 ---
 apiVersion: v1
 kind: Service
