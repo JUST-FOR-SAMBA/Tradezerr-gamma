@@ -1,21 +1,25 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
-import { Response, Request } from "express";
-import User from "../models/user";
+import { Response, Request, NextFunction } from "express";
+import { User, Role } from "../models/";
 import IUser from "../interfaces/user";
+import IRoles from "../interfaces/roles";
+import { sendConfirmationEmail } from "../config/nodemailer";
+import { uuidGenerator } from "../_helpers/generateUuid";
 
 const SECRET: any = process.env.SECRET;
 
 /** Generating a JWT Token */
-const generateAccessToken = (user: IUser) => {
+const generateAccessToken = (user: IUser, role: string[]) => {
   return jwt.sign(
     {
       id: user._id,
       username: user.username,
+      role: role,
     },
     SECRET,
-    { expiresIn: "20d" }
+    { expiresIn: "10d" }
   );
 };
 
@@ -24,8 +28,9 @@ export const loginUser = async (req: Request, res: Response) => {
   const { password, email } = req.body;
   const user = await User.findOne({
     email: { $regex: new RegExp("^" + email + "$", "i") },
-  });
-
+  })
+    .populate("roles", "-__v")
+    .exec();
   if (!user) {
     return res
       .status(400)
@@ -38,19 +43,27 @@ export const loginUser = async (req: Request, res: Response) => {
     return res.status(401).send({ message: "Invalid username or password." });
   }
 
-  const accessToken = generateAccessToken(user);
+  let authorities = [];
+
+  for (let i = 0; i < user.roles.length; i++) {
+    authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+  }
+
+  const accessToken = generateAccessToken(user, authorities);
   res.status(200).json({
     data: {
-      accessToken,
-      username: user,
       id: user._id,
+      accessToken,
+      username: user.username,
+      roles: authorities,
     },
   });
 };
 
 /** Sign up user */
 export const signupUser = async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
+  const uuid = uuidGenerator();
 
   if (!password || password.length < 6) {
     return res
@@ -88,13 +101,78 @@ export const signupUser = async (req: Request, res: Response) => {
     username,
     email,
     passwordHash,
+    uuid: uuid,
   });
-  const savedUser = await user.save();
-  res.status(200).json({
-    data: {
-      username: savedUser.username,
-      email: savedUser.email,
-      id: savedUser._id,
-    },
-  });
+
+  Role.findOne(
+    { name: role ? role : "lender" },
+    async (err: any, role: IRoles) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      user.roles = [role._id];
+
+      const savedUser = await user.save();
+
+      // Send confirmation email
+      jwt.sign(
+        {
+          user: savedUser.email,
+        },
+        SECRET,
+        { expiresIn: "1d" },
+        (err: any, emailToken: any) => {
+          const url = `http://localhost:1337/api/auth/verify/${emailToken}`;
+          sendConfirmationEmail(user.username, user.email, url);
+        }
+      );
+      res.status(200).json({
+        data: {
+          username: savedUser.username,
+          email: savedUser.email,
+          id: savedUser._id,
+          status: savedUser.status,
+        },
+      });
+    }
+  );
+};
+
+export const verifyUser = async (req: Request, res: Response) => {
+  const checkToken: jwt.JwtPayload | any = jwt.verify(req.params.token, SECRET);
+
+  if (checkToken?.user) {
+    const user = await User.findOne({ email: checkToken.user });
+    if (user) {
+      user.status = "Active";
+      await user.save();
+      res.status(200).send({ message: "Your account has been verified." });
+    } else {
+      res.status(400).send({ message: "Invalid token." });
+    }
+  }
+};
+
+// Resend mail verification
+export const resendMail = async (req: Request, res: Response) => {
+  const { username, email } = req.body;
+  try {
+    jwt.sign(
+      {
+        user: email,
+      },
+      SECRET,
+      { expiresIn: "1d" },
+      (err: any, emailToken: any) => {
+        const url = `http://localhost:1337/api/auth/verify/${emailToken}`;
+        sendConfirmationEmail(username, email, url);
+      }
+    );
+    res.status(200).send({
+      message: " A message has been sent to your Email.",
+    });
+  } catch (error) {
+    res.status(500).send({ message: error });
+  }
 };

@@ -1,8 +1,15 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
 export default interface IUser extends Document {
-    uid: string;
-    username: string;
-    email: string;
-    passwordHash: string;
+  _doc?: any;
+  uid: string;
+  username: string;
+  email: string;
+  passwordHash: string;
+  roles: any;
+  status: string;
+  phone: string;
+  taxNumber: string;
+  isVerified: boolean;
+  uuid: string;
 }
