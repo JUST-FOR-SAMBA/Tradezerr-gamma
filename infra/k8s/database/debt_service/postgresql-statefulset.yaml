@@ -1,0 +1,62 @@
+# PostgreSQL StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql-debt
+spec:
+  serviceName: postgresql-debt
+  selector:
+    matchLabels:
+      app: postgresql-debt
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: postgresql-debt
+    spec:
+      containers:
+      - name: postgresql-debt
+        image: postgres
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - name: postgresql-debt
+          containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - name: postgresql-debt-disk
+          mountPath: /data
+        env:
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_DB
+          value: Debt
+        - name: PGDATA
+          value: /data/pgdata
+  # Volume Claim
+  volumeClaimTemplates:
+  - metadata:
+      name: postgresql-debt-disk
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
+---
+# PostgreSQL StatefulSet Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-debt
+spec:
+  type: LoadBalancer
+  selector:
+    app: postgresql-debt
+  ports:
+  - name: postgresql
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    

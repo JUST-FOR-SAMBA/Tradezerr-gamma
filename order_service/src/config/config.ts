@@ -1,7 +1,7 @@
 const config = {
     server: {
         host: 'localhost',
-        port: 8083
+        port: 8082
     }
 };
 

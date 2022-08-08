@@ -7,10 +7,10 @@ const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const PATH = "/api/debt";
+const PATH = "/api/order";
 
 app.get(PATH, (req: Request, res: Response) => {
-    res.status(200).json({message: "Welcome to the Debt Service!"})
+    res.status(200).json({message: "Welcome to the Order Service!"})
 })
 // must have admin role
 app.use(PATH, getAllBusinessRouter);
@@ -23,5 +23,4 @@ app.use((_, res) => {
         message: error.message
     });
 });
-
 export {app}

@@ -3,7 +3,10 @@ user_service/node_modules
 user_service/.env
 =======
 debt_service/node_modules
+debt_service/.env
 order_service/node_modules
+order_service/.env
 transaction_service/node_modules
 payment_service/node_modules
+rabbitmq-test/pub/node_modules
 >>>>>>> bf1fb71 (Added Transaction Debt and Orser service)

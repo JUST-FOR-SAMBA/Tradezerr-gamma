@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Business {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  businessName String @db.VarChar(255)
+  businessUniqueIdentifier String @unique
+  businessRegNumber String @unique
+  businessTaxNumber String
+  description String?
+  businessOwnerName String
+  businessOwnerId String
+  isVerified Boolean @default(false)
+  debts Debt[]
+}
+
+model Debt {
+  id Int @id @default(autoincrement())
+  business Business @relation(fields: [businessId], references: [id])
+  businessId Int
+  businessName String
+  dateOfIssuing DateTime
+  askedAmount Decimal
+  interestRate Decimal
+  repaymentPeriod Decimal
+  givenAmount Decimal
+  debtUniqueIdentifier String @unique
+  debtStatus String
+  debtRepaymentStatus String
+  debtByLender DebtByLender[]
+  repayments Repayment[]
+}
+
+model DebtByLender {
+  id Int @id @default(autoincrement())
+  debt Debt @relation(fields: [debtId], references: [id])
+  debtId Int
+  lenderUniqueIdentifier String
+  lenderName String
+  amountLent Decimal
+  lendingDate DateTime
+  repaymentDate DateTime
+  previousTransactionRef String
+}
+model Repayment {
+  id Int @id @default(autoincrement())
+  debt Debt @relation(fields: [debtId], references: [id])
+  debtId Int
+  lenderUniqueIdentifier String
+  lenderName String
+  amountPaid Decimal
+  date DateTime
+  repaymentDate DateTime
+  previousTransactionRef String
+}
