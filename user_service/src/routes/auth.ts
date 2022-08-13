@@ -5,14 +5,13 @@ import {
   verifyUser,
   resendMail,
 } from "../controllers/user.auth";
-import { authorize, authRole } from "../middleware/authorization";
-import Roles from "../_helpers/role";
+import { authChanges, authorize } from "../middleware/authorization";
 const router = express.Router();
 // REGISTER
 router.post("/register", signupUser);
 
 //  Admin create new user
-router.post("/admin/register", authorize, authRole(Roles.Admin), signupUser);
+router.post("/admin/register", authorize, authChanges, signupUser);
 
 //  LOGIN
 router.post("/login", loginUser);

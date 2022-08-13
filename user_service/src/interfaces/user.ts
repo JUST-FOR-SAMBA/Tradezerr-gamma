@@ -6,7 +6,7 @@ export default interface IUser extends Document {
   username: string;
   email: string;
   passwordHash: string;
-  roles: any;
+  role: string;
   status: string;
   phone: string;
   taxNumber: string;

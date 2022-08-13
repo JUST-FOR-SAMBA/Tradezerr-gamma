@@ -5,7 +5,6 @@ import { config } from "./config/config";
 
 import userRoutes from "./routes/user";
 import authRoutes from "./routes/auth";
-import { initial } from "./_helpers/initialRole";
 
 const router = express();
 const dbUrl = config.mongo.url as string;
@@ -14,8 +13,6 @@ const dbUrl = config.mongo.url as string;
 mongoose
   .connect(dbUrl, config.mongo.options)
   .then(() => {
-    initial();
-
     console.log("DB Connected");
   })
   .catch((error) => {

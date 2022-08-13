@@ -9,7 +9,6 @@ const read = async (req: Request, res: Response) => {
   logging.info(`Incoming read for user with username ${id}`);
 
   User.findById(id)
-    .populate("roles", "-__v")
     .exec()
     .then((user) => {
       if (user) {
@@ -36,7 +35,6 @@ const readAll = (_: Request, res: Response) => {
   logging.info("Read all route called");
 
   User.find()
-    .populate("roles", "-__v")
     .exec()
     .then((users) => {
       return res.status(200).json({
@@ -89,35 +87,28 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { userId } = req.body;
+  logging.info(`Incoming delete for user with username ${id}`);
 
-  if (userId == id) {
-    logging.info(`Incoming delete for user with username ${id}`);
-
-    User.findByIdAndDelete(id)
-      .exec()
-      .then((user) => {
-        if (user) {
-          return res.status(200).json({
-            message: "User deleted.",
-          });
-        } else {
-          return res.status(404).json({
-            error: "User not found.",
-          });
-        }
-      })
-      .catch((error) => {
-        logging.error(error.message);
-
-        return res.status(500).json({
-          error: error.message,
+  User.findByIdAndDelete(id)
+    .exec()
+    .then((user) => {
+      if (user) {
+        return res.status(200).json({
+          message: "User deleted.",
         });
+      } else {
+        return res.status(404).json({
+          error: "User not found.",
+        });
+      }
+    })
+    .catch((error) => {
+      logging.error(error.message);
+
+      return res.status(500).json({
+        error: error.message,
       });
-  } else {
-    return res.status(404).json({
-      error: "You can only delete your own account.",
     });
-  }
 };
 
 // verify user by id

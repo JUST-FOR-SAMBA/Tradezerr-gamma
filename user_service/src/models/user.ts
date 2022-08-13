@@ -16,17 +16,20 @@ const UserSchema: Schema = new Schema<IUser>(
       enum: ["Pending", "Active"],
       default: "Pending",
     },
+    isVerified: {
+      type: Schema.Types.Boolean,
+      default: false,
+    },
     passwordHash: {
       type: String,
       required: true,
       min: 6,
     },
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
-      },
-    ],
+    role: {
+      type: String,
+      enum: ["admin", "lender", "business-owner"],
+      default: "lender",
+    },
   },
   { timestamps: true }
 );

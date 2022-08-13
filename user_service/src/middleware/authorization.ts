@@ -39,8 +39,11 @@ export const authorize = (req: any, res: Response, next: NextFunction) => {
   }
 };
 
-export const authRole = (userRole: string) => {
-  return (req: any, res: Response, next: NextFunction) => {
+export const authRole = (req: any, res: Response, next: NextFunction) => {
+  try {
+    if (!req.headers.authorization) {
+      res.status(401).json("access Denied !");
+    }
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
@@ -48,20 +51,27 @@ export const authRole = (userRole: string) => {
         .status(401)
         .send({ message: "No auth token found. Authorization denied." });
     }
-
     const decodedToken: jwt.JwtPayload | any = jwt.verify(token, SECRET);
 
-    if (decodedToken.username !== "razac") {
+    // We can add more conditions here.
+    if (decodedToken.isVerified) {
       return res.status(401).json("access Denied !");
     }
     next();
-  };
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "unauthorized",
+    });
+  }
 };
 
 export const authChanges = (req: any, res: Response, next: NextFunction) => {
-  const { role } = req.body;
-  if (!canMakeChange(role)) {
-    return res.status(401).json("access Denied !");
+  const { id } = req.params;
+  const { role, userId } = req.body;
+
+  if (!canMakeChange(role) || !(userId != id)) {
+    return res.status(401).json("Access denied for this level !");
   }
   next();
 };
