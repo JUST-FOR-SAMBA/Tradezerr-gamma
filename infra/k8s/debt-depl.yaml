@@ -30,7 +30,7 @@ spec:
         -  containerPort: 8083
         env:
         - name: POSTGRESQL_HOST
-          value: "postgresql-debt-lb.database.svc.cluster.local"
+          value: "postgresql-debt-0.postgresql-debt.database.svc.cluster.local"
         - name: POSTGRESQL_PORT
           value: "5432"
         - name: POSTGRESQL_USERNAME

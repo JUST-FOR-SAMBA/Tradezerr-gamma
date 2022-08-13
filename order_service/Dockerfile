@@ -1,6 +1,6 @@
-FROM node:alpine
+FROM node:lts
 
-#RUN apt-get -qy update && apt-get -qy install openssl
+RUN apt-get -qy update && apt-get -qy install openssl
 
 WORKDIR /app
 
@@ -17,6 +17,8 @@ COPY tsconfig.json ./
 COPY . .
 
 RUN npm install
+
+EXPOSE 8082
 
 RUN npx prisma generate
 
