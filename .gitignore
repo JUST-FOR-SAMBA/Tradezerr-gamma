@@ -1,3 +1,4 @@
+node_modules
 user_service/node_modules
 user_client/node_modules
 debt_service/node_modules
@@ -8,6 +9,6 @@ transaction_service/node_modules
 payment_service/node_modules
 rabbitmq-test/pub/node_modules
 infra/k8s/secret.yaml
-common/node_modules
-common/build
+commona/node_modules
+commona/build
 .DS_Store
