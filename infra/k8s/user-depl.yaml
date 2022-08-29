@@ -15,6 +15,21 @@ spec:
       containers:
         - name: user
           image: 2021199724/user-service
+          env:
+          - name: MONGODB_HOST
+            value: "mongodb-user-0.mongodb-user.database.svc.cluster.local"
+          - name: MONGODB_PORT
+            value: "27017"
+          - name: MONGODB_USERNAME
+            value: "mongo"
+          - name: MONGODB_PASSWORD
+            value: "mongo"
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: tradezerr-secrets
+                key: jwtSecret
+                optional: false
 ---
 apiVersion: v1
 kind: Service

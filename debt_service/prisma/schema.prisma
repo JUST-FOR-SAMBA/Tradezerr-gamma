@@ -29,7 +29,7 @@ model Debt {
   business Business @relation(fields: [businessId], references: [id])
   businessId Int
   businessName String
-  dateOfIssuing DateTime
+  dateOfIssuing DateTime @default(now())
   askedAmount Decimal
   interestRate Decimal
   repaymentPeriod Decimal

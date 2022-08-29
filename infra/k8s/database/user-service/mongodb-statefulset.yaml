@@ -1,0 +1,57 @@
+#MongoDB StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb-user
+spec:
+  serviceName: mongodb-user
+  selector:
+    matchLabels:
+      app: mongodb-user
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongodb-user
+    spec:
+      containers:
+      - name: mongodb-user
+        image: mongo
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - name: mongodb-user
+          containerPort: 27017
+          protocol: TCP
+        volumeMounts:
+        - name: mongodb-user-disk
+          mountPath: /data
+        env:
+        - name: MONGODB_PASSWORD
+          value: mongo
+        - name: MONGODB_USER
+          value: mongo
+  # Volume Claim
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb-user-disk
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
+---
+# MongoDB StatefulSet Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-user
+spec:
+  type: LoadBalancer
+  selector:
+    app: mongodb-user
+  ports:
+  - name: mongodb
+    protocol: TCP
+    port: 27017
+    targetPort: 27017

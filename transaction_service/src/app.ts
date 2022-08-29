@@ -10,7 +10,7 @@ app.get("/api/users", (req: Request, res: Response) => {
     res.status(200).send({"message": "Hello Kaka Derick"})
 })
 app.use((_, res) => {
-    const error = new Error('Not found');
+    const error = new Error('Transaction Not found');
 
     res.status(404).json({
         message: error.message

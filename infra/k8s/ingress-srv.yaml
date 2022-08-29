@@ -16,10 +16,17 @@ spec:
                 name: user-srv
                 port:
                   number: 8080
-          - path: /api/transactions/?(.*) 
+          - path: /api/debts/?(.*)
             pathType: Prefix
             backend:
-              service: 
-                name: transaction-srv
+              service:
+                name: debt-service
                 port:
-                  number: 8081       
+                  number: 8083
+          # - path: /api/transactions/?(.*) 
+          #   pathType: Prefix
+          #   backend:
+          #     service: 
+          #       name: transaction-srv
+          #       port:
+          #         number: 8081       

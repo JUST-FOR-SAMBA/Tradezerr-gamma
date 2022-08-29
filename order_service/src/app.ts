@@ -1,6 +1,5 @@
 import express, { Application, Request, Response } from 'express';
-import { getAllBusinessRouter } from './routes/getbusinessesRoute';
-import { postBusinessRouter } from './routes/postBusinessRoute';
+import { getOrderRouter } from './routes/getOrderRoute';
 
 const app: Application = express();
 
@@ -12,12 +11,12 @@ const PATH = "/api/order";
 app.get(PATH, (req: Request, res: Response) => {
     res.status(200).json({message: "Welcome to the Order Service!"})
 })
-// must have admin role
-app.use(PATH, getAllBusinessRouter);
-app.use(PATH, postBusinessRouter);
+
+// must ask for lender role to get order by the appropriate lender
+app.get(PATH,getOrderRouter);
 
 app.use((_, res) => {
-    const error = new Error('Not found');
+    const error = new Error('Order Not found');
 
     res.status(404).json({
         message: error.message

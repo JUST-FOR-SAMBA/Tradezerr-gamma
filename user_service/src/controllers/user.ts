@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import logging from "../config/logging";
 import User from "../models/user";
-import argon2 from "argon2";
 
 // Get one user by id
 const read = async (req: Request, res: Response) => {
