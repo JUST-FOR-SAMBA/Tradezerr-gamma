@@ -1,5 +1,5 @@
 name: deploy-manifests
-
+# deploy all neccessary infra files
 on:
   push:
     branches:

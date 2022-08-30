@@ -3,6 +3,9 @@ import { useContext, createContext } from "react";
 import { useQuery } from "react-query";
 import getCurrentUser from "../helpers/currentUser";
 
+/**
+ * I remember this frommmm
+ */
 const UserDataContext = createContext();
 
 export const useUserData = () => useContext(UserDataContext);
