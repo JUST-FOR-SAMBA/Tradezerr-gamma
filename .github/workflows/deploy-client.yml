@@ -1,5 +1,6 @@
 name: deploy-client
 # we shall get there
+# added on the push workflow
 on:
   push:
     branches:
