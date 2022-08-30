@@ -38,14 +38,14 @@ router.get('/check-lender', currentUser, checkLender, (req: Request, res: Respon
    });
 },)
 
-// CHECK ADMIN 
-router.get('/check-admin', currentUser, checkAdmin, (req: Request, res: Response) => {
-  res.send({ 
-    userRole: req.currentUser?.role || null,
-    userStatus: req.currentUser?.status
-   });
-},)
-// RESEND VERIFICATION
+// // CHECK ADMIN 
+// router.get('/check-admin', currentUser, checkAdmin, (req: Request, res: Response) => {
+//   res.send({ 
+//     userRole: req.currentUser?.role || null,
+//     userStatus: req.currentUser?.status
+//    });
+// },)
+// // RESEND VERIFICATION
 
 router.post("/sendVerify", authorize, resendMail);
 
