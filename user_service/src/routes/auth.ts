@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/register", signupUser);
 
 //  Admin create new user
-router.post("/admin/endpoint/register", signupAdmin);
+router.post("/admin/register", signupAdmin);
 
 //  LOGIN
 router.post("/login", loginUser);

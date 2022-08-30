@@ -1,7 +1,7 @@
 import axios from 'axios';
 import LocalStorage from '../helpers/localStorage';
 
-const baseURL = "http://localhost:1337/api/";
+const baseURL = "/api";
 const token = LocalStorage.getToken();
 
 axios.defaults.baseURL = baseURL;
