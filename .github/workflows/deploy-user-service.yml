@@ -1,0 +1,19 @@
+name: deploy-user-service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'user_service/**'
+jobs:
+  build:
+    runs-on:  ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd user_service && docker build -t 2021199724/user-service .
+      - run: docker login -u $DOCKER_ID -p $DOCKER_PASSWORD
+        env:
+          DOCKER_ID: ${{ secrets.DOCKER_ID }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push 2021199724/user-service
