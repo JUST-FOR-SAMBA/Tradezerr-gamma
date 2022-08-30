@@ -21,4 +21,4 @@ jobs:
         with:
           token: ${{secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - run: doctl kubernetes cluster kubeconfig save tradezerr
-      - run: kubectl rollout restart deployment user-depl
+      - run: kubectl rollout restart deployment client-depl
