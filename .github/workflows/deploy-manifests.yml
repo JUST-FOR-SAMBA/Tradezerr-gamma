@@ -15,4 +15,4 @@ jobs:
         with:
           token: ${{secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - run: doctl kubernetes cluster kubeconfig save tradezerr
-      - run: kubectl apply -f infra/k8s/database/user-service/mongodb-statefulset.yaml && kubectl apply -f infra/k8s/user-depl.yaml && kubectl apply -f infra/k8s/ingress-srv.yaml && kubectl apply -f infra/k8s-prod/ingress-srv.yaml && kubectl apply -f infra/k8s/client-depl.yaml
+      - run: kubectl apply -f infra/k8s/database/user-service/mongodb-statefulset.yaml && kubectl apply -f infra/k8s/user-depl.yaml && kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod/ingress-srv.yaml && kubectl apply -f infra/k8s/client-depl.yaml
