@@ -14,6 +14,7 @@ app.set('trust proxy', true);
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2'],
+  secure: process.env.NODE_ENV !== 'test',
 }))
 // Connect to MongoBD
 const connectMongo = async () => {
@@ -24,7 +25,6 @@ const connectMongo = async () => {
     logging.error(err);
   }
 }
-
 
 //  Parse the Body {bodyParser is already included in Express}
 app.use(express.json());
