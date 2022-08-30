@@ -3,6 +3,7 @@ kind: Config
 deploy:
   kubectl:
     manifests:
+      - ./infra/k8s-dev/*
       - ./infra/k8s/ingress-srv.yaml
       - ./infra/k8s/user-depl.yaml
       - ./infra/k8s/database/user-service/mongodb-statefulset.yaml
