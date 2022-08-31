@@ -17,7 +17,7 @@ spec:
       containers:
       - name: mongodb-user
         image: mongo
-        imagePullPolicy: "IfNotPresent"
+        imagePullPolicy: "Always"
         ports:
         - name: mongodb-user
           containerPort: 27017
@@ -36,7 +36,7 @@ spec:
       name: mongodb-user-disk
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: "standard"
+      storageClassName: "do-block-storage"
       resources:
         requests:
           storage: 1Gi
