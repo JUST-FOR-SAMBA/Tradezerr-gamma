@@ -11,3 +11,6 @@ axios.defaults.headers.Authorization = token
     : null;
 
 export default axios;
+/**
+ * Guess Derick will use his approach to speed the development up
+ */

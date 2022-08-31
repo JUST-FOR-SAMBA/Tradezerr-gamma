@@ -49,3 +49,5 @@ connectMongo();
 app.listen(8080, () =>
   logging.info(`Server is running ${config.server.host}:${config.server.port}`)
 );
+
+// Guess Derick will use his approach
